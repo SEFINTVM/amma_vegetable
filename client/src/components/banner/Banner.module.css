@@ -1,0 +1,25 @@
+.banner {
+            /* full viewport width */
+  height: auto;             /* let height adjust */
+  aspect-ratio: 1432 / 646; /* maintain original image ratio */
+  background-size: cover;    /* cover full width, may crop a little */
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 10px;       /* optional */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  position: relative;
+  margin: 20px 30px;
+}
+
+
+.overlayText {
+  color: white;
+  text-align: center;
+  padding-top: 120px; /* adjust to vertically center text */
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  position: absolute;
+  width: 100%;
+  top: 0;
+}
