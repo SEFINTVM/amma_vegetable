@@ -22,6 +22,7 @@ body {
     background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #2e2e2e);
     color: #fff;
     min-height: 100vh;
+    scroll-behavior: smooth;
 }
 
 
