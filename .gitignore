@@ -31,7 +31,7 @@ build/
 dist/
 
 # Environment files
-.env
+server/.env
 
 # VS Code settings
 .vscode/

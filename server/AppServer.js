@@ -30,7 +30,7 @@ app.use(session({
 }))
 
 
-mongoose.connect("mongodb+srv://AmmaUser:AmmaUser123@sefindb.bwyiszt.mongodb.net/AmmaVegetable?appName=SefinDB").then(()=>{console.log("Mongo Connected")}).catch(err=>console.error(err))
+mongoose.connect(process.env.MONGO_URL).then(()=>{console.log("Mongo Connected")}).catch(err=>console.error(err))
 
 app.use('/api',Router);
 app.listen(3000,(err)=>{
