@@ -1,17 +1,17 @@
 import { useState } from "react";
 import HeaderStyle from "./Header.module.css";
 import Login from "../../pages/Login/Login";
-import  { useNavigate } from 'react-router-dom'
+import  { NavLink, useNavigate } from 'react-router-dom'
 
 
-const Header = () => {
+const Header = ({logged,setLogged}) => {
     const [showLogin,setShowLogin]=useState(false)
     const [SwitchLoginLogout,setSwitchLoginLogout]=useState(false)
     const Navigate=useNavigate()
-    const switchToLogin=(e)=>{
-      e.preventDefault();
-      Navigate('/LogReg')
-    }
+    // const switchToLogin=(e)=>{
+    //   e.preventDefault();
+    //   Navigate('/LogReg')
+    // }
 
     const LogOutHandle=async()=>{
         try{
@@ -19,7 +19,9 @@ const Header = () => {
 
           if(res.ok){
             setSwitchLoginLogout(false);
+            setLogged(false)
             alert('Logged out Successfully')
+            Navigate('/')
           }else{
             alert('Logout Failed')
           }
@@ -45,13 +47,13 @@ const Header = () => {
       <nav className={HeaderStyle.headerright}>
         <a href="/">Home</a>
         <a href="/cart">Cart</a>
-        {SwitchLoginLogout&&<a href="/cart">Account</a>}
-       {!SwitchLoginLogout?<button className={HeaderStyle.loginbtn} onClick={() => setShowLogin(true)}>Login</button>:
+        {logged&&<NavLink to="/Account">Account</NavLink>}
+       {!logged?<button className={HeaderStyle.loginbtn} onClick={() => setShowLogin(true)}>Login</button>:
         <button className={HeaderStyle.loginbtn} onClick={LogOutHandle} >Logout</button>}
       </nav>
     </header>
 
-    {showLogin && <Login closeModal={() => setShowLogin(false)} setSwitchLoginLogout={setSwitchLoginLogout} />}
+    {showLogin && <Login closeModal={() => setShowLogin(false)} setLogged={setLogged} setSwitchLoginLogout={setSwitchLoginLogout} />}
 
    </>
   );

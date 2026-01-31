@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LoginStyle from "./Login.module.css";
 
-const Login = ({ closeModal,setSwitchLoginLogout }) => {
+const Login = ({ closeModal,setSwitchLoginLogout,setLogged }) => {
   const [ToggleForm,setToggleForm]=useState(true)
   const [RegFormData,setRegFormData]=useState({
     Name:'',
@@ -38,9 +38,11 @@ const Login = ({ closeModal,setSwitchLoginLogout }) => {
            const d= await res.json()
 
            if(res.ok){
+            setLogged(true)
             console.log('Login successful:', d);
             alert('Your Login Has Successful')
             setSwitchLoginLogout(true)
+
             closeModal()
             
 

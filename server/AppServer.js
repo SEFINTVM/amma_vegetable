@@ -4,8 +4,9 @@ const mongoose=require('mongoose')
 const cors=require('cors')
 const bcrypt=require('bcryptjs');
 const path=require('path')
-const session=require('express-session');
+// const session=require('express-session');
 const { error } = require('console');
+const cookieParser=require('cookie-parser')
 require('dotenv').config();
 
 const app=express();
@@ -17,17 +18,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 app.use(express.static('public'))
 
-app.use(session({
-    secret:'AmmaVegetable',
-    resave:false,
-    saveUninitialized:false,
-    cookie:{
-        httpOnly:true,
-        maxAge:1000*60*60,
-        secure:false,
-        sameSite:'lax'
-    }
-}))
+app.use(cookieParser());
 
 
 mongoose.connect(process.env.MONGO_URL).then(()=>{console.log("Mongo Connected")}).catch(err=>console.error(err))
