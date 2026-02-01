@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./VegCard.module.css";
+import { toast } from "react-toastify";
 
 const VegCard = ({ veg }) => {
 
@@ -19,13 +20,13 @@ const VegCard = ({ veg }) => {
 
         const data=await res.json()
         if (res.ok) {
-          alert('Added to cart!');
+          toast.success('Added to cart!');
         } else {
-          alert(data.message || 'Failed to add to cart');
+          toast.error(data.message || 'Failed to add to cart');
         }
       }catch(err){
        console.error(err);
-    alert('Server error'); 
+    toast.error('Server error'); 
       }
   }
   return (

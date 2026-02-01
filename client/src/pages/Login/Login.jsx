@@ -1,5 +1,6 @@
 import { useState } from "react";
 import LoginStyle from "./Login.module.css";
+import { toast } from "react-toastify";
 
 const Login = ({ closeModal,setSwitchLoginLogout,setLogged }) => {
   const [ToggleForm,setToggleForm]=useState(true)
@@ -40,7 +41,7 @@ const Login = ({ closeModal,setSwitchLoginLogout,setLogged }) => {
            if(res.ok){
             setLogged(true)
             console.log('Login successful:', d);
-            alert('Your Login Has Successful')
+            toast.success('Your Login Has Successful')
             setSwitchLoginLogout(true)
 
             closeModal()
@@ -48,6 +49,7 @@ const Login = ({ closeModal,setSwitchLoginLogout,setLogged }) => {
 
            } else {
               // Login failed
+              toast.error('Login failed')
               console.error('Login failed:', d.message || d);
             }
           
@@ -66,14 +68,14 @@ const Login = ({ closeModal,setSwitchLoginLogout,setLogged }) => {
             const data=resp.json()
 
             if(resp.ok){
-              alert('Registration Successful')
+              toast.success('Registration Successful')
               setToggleForm(!ToggleForm)
             }else{
-              alert(data.message)
+              toast.error(data.message)
             }
       }catch(err){
             console.error(err);
-            alert('server error')
+            toast.error('server error')
         
       }
   }

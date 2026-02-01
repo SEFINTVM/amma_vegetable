@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AccountStyle from "./Account.module.css";
+import { toast } from 'react-toastify';
 
 function Account() {
   const [PassForm,setPassForm]=useState({
@@ -67,7 +68,7 @@ function Account() {
         e.preventDefault();
 
         if(PassForm.NewPass!==PassForm.ConNewPass){
-          return alert('Password do not match')
+          return toast.error('Password do not match')
         }
 
         const res=await fetch('http://localhost:3000/api/PassChange',{
@@ -81,7 +82,7 @@ function Account() {
         })
 
         const data=await res.json();
-        alert(data.message);
+        toast.success(data.message);
 
         if (res.ok) setMode("view");
       }

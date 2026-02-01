@@ -150,3 +150,96 @@
 .deleteBtn:active {
   transform: scale(0.95);
 }
+
+
+.BuySec {
+  min-width: 600px;
+  margin-top: 20px;
+  padding: 20px;
+  background: #0f0f0f;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  margin-bottom: 50px;
+}
+
+.Payement {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Payment options */
+.cash,
+.upi {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: #1a1a1a;
+  border: 2px solid #222;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-weight: 500;
+  color: #fff;
+}
+
+/* Hide default radio */
+.cash input,
+.upi input {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #22c55e; /* green border */
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Radio inner dot */
+.cash input:checked::before,
+.upi input:checked::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #f97316; /* ORANGE dot */
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* When selected → glow effect */
+.cash input:checked + span,
+.upi input:checked + span {
+  color: #f97316;
+}
+
+/* Hover */
+.cash:hover,
+.upi:hover {
+  border-color: #22c55e;
+  background: #162a1c;
+}
+
+/* BUY button */
+.BuyBtn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: #000;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.4);
+}
+
+.BuyBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(249, 115, 22, 0.6);
+}

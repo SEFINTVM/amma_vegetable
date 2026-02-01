@@ -2,6 +2,7 @@ import { useState } from "react";
 import HeaderStyle from "./Header.module.css";
 import Login from "../../pages/Login/Login";
 import  { NavLink, useNavigate } from 'react-router-dom'
+import { toast } from "react-toastify";
 
 
 const Header = ({logged,setLogged}) => {
@@ -20,10 +21,10 @@ const Header = ({logged,setLogged}) => {
           if(res.ok){
             setSwitchLoginLogout(false);
             setLogged(false)
-            alert('Logged out Successfully')
+            toast.success('Logged out Successfully')
             Navigate('/')
           }else{
-            alert('Logout Failed')
+            toast.error('Logout Failed')
           }
         }catch(err){
           console.error(err);

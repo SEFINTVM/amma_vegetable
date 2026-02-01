@@ -8,9 +8,20 @@ const  mongoose  = require('mongoose');
 const strict = require('assert/strict');
 const jwt=require('jsonwebtoken');
 const { error } = require('console');
+const { type } = require('os');
+const nodemailer=require('nodemailer')
  require('dotenv').config()
 
 
+const transporter=nodemailer.createTransport({
+      host:'smtp.gmail.com',
+      port:587,
+      secure:false,
+      auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+      },
+})
 
 const NewUser=new mongoose.Schema({
       Name:String,
@@ -33,8 +44,25 @@ const CartUser=new mongoose.Schema({
       ]
 })
 
+const OrderScheme=new mongoose.Schema({
+      userId:String,
+      items:[
+            {
+                  prodName:String,
+                  prodQuantity:Number,
+                  prodPrice:Number
+            },
+      ],
+      totalAmount:Number,
+      paymentMethod:String,
+      Address:String,
+      status:{type:String,default:'Confirmed'},
+      orderData:{type:Date,default:Date.now()},
+})
+
 const User=mongoose.model('User',NewUser);
 const Product=mongoose.model('Product',CartUser)
+const Order=mongoose.model('Order',OrderScheme)
 
 
 
@@ -318,6 +346,61 @@ Router.post('/cart/remove',AuthMiddleware,async(req,res)=>{
                   console.log(cart);
                   
                    res.json({ message: "Item removed", cart });
+      }catch(err) {
+            console.error(err);
+            res.status(500).json({ message: "Server error" });
+      }
+})
+
+Router.post('/order',AuthMiddleware,async(req,res)=>{
+      try{
+           const  userId=req.user.id;
+            const { items, total, paymentMethod, address}=req.body;
+
+            if(!items.length || !total || !paymentMethod){
+                  return res.status(400).json({message:'Invalid Order'})
+
+            }
+
+            const user=await User.findById(userId)
+
+
+            let billText=`Hello ${user.Name} \n\n Your Order Is CONFIRMED\n\n`
+
+            items.forEach(element => {
+                  billText+=  `${element.productName} - ${element.quantity}  => ${element.price*element.quantity}\n`
+
+                  
+            });
+            billText += `\nTotal: ₹${total}\nPayment: ${paymentMethod}\n\nThank you for shopping with Amma Vegetable 🥬`;
+
+            await transporter.sendMail({
+                  from: process.env.EMAIL_USER,
+                  to: user.Email,
+                  subject: "Order Confirmed 🛒",
+                  text: billText,
+            })
+
+             let ownerText = `New Order Received!\n\nCustomer: ${user.Name}\nEmail: ${user.Email}\nAddress: ${user.Address}\nPayment: ${paymentMethod}\n\nProducts:\n`;
+
+                  items.forEach(item => {
+                        ownerText += `${item.productName} - ${item.quantity}kg\n`;
+                  });
+
+                  ownerText += `\nTotal Amount: ₹${total}`;
+
+            await transporter.sendMail({
+                  from: process.env.EMAIL_USER,
+                  to: "skdude602@gmail.com",
+                  subject: "New Order Alert 🚨",
+                  text: ownerText,
+            });
+
+            await Product.findOneAndUpdate({ userId }, { items: [] });
+
+             res.json({ message: "Order placed successfully" });
+
+
       }catch(err) {
             console.error(err);
             res.status(500).json({ message: "Server error" });

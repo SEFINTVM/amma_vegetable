@@ -2,6 +2,7 @@ import React from 'react'
 import CartStyle from './Cart.module.css'
 import { useEffect } from 'react'
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 function Cart() {
     const [cartItems, setCartItems] = useState([]);
@@ -40,7 +41,7 @@ function Cart() {
       
       setCartItems(data.cart.items);
     } else {
-      alert(data.message);
+      toast.error(data.message);
     }
 
   }
@@ -59,13 +60,49 @@ function Cart() {
             if (res.ok) {
             setCartItems(data.cart.items);
             } else {
-            alert(data.message);
+            toast.error(data.message);
             }
             
         }catch(err) {
             console.error(err);
-            alert("Server error");
+            toast.error("Server error");
         }
+  }
+
+
+  const hadleOrder=async(e)=>{
+      e.preventDefault()
+      const paymentMethod=document.querySelector('input[name="payment"]:checked')?.id;
+      console.log(paymentMethod);
+      
+
+      if(!paymentMethod){
+        return toast.error('Please Seclect the Payment Option')
+      }
+
+      try{
+          const res=await fetch('http://localhost:3000/api/order',{
+            method:'POST',
+            credentials:'include',
+            headers: { "Content-Type": "application/json" },
+            body:JSON.stringify({
+              items:cartItems,
+              total:getTotal(),
+              paymentMethod
+            })
+          })
+
+          const data=await res.json();
+          if (res.ok) {
+            toast.success(data.message);   // show success
+            setCartItems([]);              // clear cart in frontend
+          } else {
+            toast.error(data.message);     // show error
+          }
+      }catch (err) {
+        console.error(err);
+        toast.error("Server error");
+      }
   }
   return (
     <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
@@ -99,6 +136,21 @@ function Cart() {
                 
             }
             <div className={CartStyle.TotAmontSec}>Total Amount: {getTotal()}</div>
+            {cartItems.length&&<div className={CartStyle.BuySec}>
+              <div className={CartStyle.Payement}>
+                <span className={CartStyle.cash}>
+                  <input type="radio" name="payment" id="cash" />
+                  <span><label htmlFor="#cash">Cash On Delivery</label></span>
+                </span>
+
+                <span className={CartStyle.upi}>
+                  <input type="radio" name="payment" id="upi" />
+                  <span>UPI Payment</span>
+                </span>
+
+                <button className={CartStyle.BuyBtn} onClick={hadleOrder}>BUY</button>
+              </div>
+            </div>}
             
         
     </div>
